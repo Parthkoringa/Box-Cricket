@@ -104,6 +104,7 @@ All other routes require `requireAuth`; owner-only routes add `requireRole('owne
 
 | Endpoint | Who | Purpose |
 |---|---|---|
+| `GET /courts` | both | list active courts (feeds the booking form's court selection; auto-picked when only one exists) |
 | `GET /bookings` | both | list/search: `?date=`, `?from/to=`, `?status=`, `?q=` (name/phone). Worker results force-clamped server-side to today −7d → future |
 | `POST /bookings` | owner | create |
 | `GET /bookings/:id` | both | detail + payments + items + balance (via `booking_balances` view) |
