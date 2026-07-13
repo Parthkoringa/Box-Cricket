@@ -8,6 +8,7 @@ import { itemsRouter } from './routes/items';
 import { paymentsRouter } from './routes/payments';
 import { remindersRouter } from './routes/reminders';
 import { reportsRouter } from './routes/reports';
+import { usersRouter } from './routes/users';
 
 export const app = express();
 
@@ -25,6 +26,7 @@ app.use('/api/payments', requireAuth, paymentsRouter);
 app.use('/api/items', requireAuth, itemsRouter);
 app.use('/api/reminders', requireAuth, remindersRouter);
 app.use('/api/reports', requireAuth, requireRole('owner'), reportsRouter);
+app.use('/api/users', requireAuth, usersRouter);
 app.use('/api/auth', authRouter);
 
 app.use(errorHandler);
