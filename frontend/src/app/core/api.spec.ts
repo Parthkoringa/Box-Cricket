@@ -42,6 +42,29 @@ describe('API services', () => {
     const del = ctrl.expectOne('/api/payments/p1');
     expect(del.request.method).toBe('DELETE');
     del.flush({});
+
+    api.cancel('b2').subscribe();
+    const cancelNoReason = ctrl.expectOne('/api/bookings/b2/cancel');
+    expect(cancelNoReason.request.body).toEqual({});
+    cancelNoReason.flush({});
+  });
+
+  it('BookingsApi.deleteItem targets /api/items/:id with DELETE', () => {
+    const api = TestBed.inject(BookingsApi);
+    api.deleteItem('i1').subscribe();
+    const req = ctrl.expectOne('/api/items/i1');
+    expect(req.request.method).toBe('DELETE');
+    req.flush({ deleted: 'i1' });
+  });
+
+  it('BookingsApi.list omits empty-string filters entirely', () => {
+    const api = TestBed.inject(BookingsApi);
+    api.list({ date: '', status: '', q: 'x' }).subscribe();
+    const req = ctrl.expectOne((r) => r.url === '/api/bookings');
+    expect(req.request.params.has('date')).toBe(false);
+    expect(req.request.params.has('status')).toBe(false);
+    expect(req.request.params.get('q')).toBe('x');
+    req.flush([]);
   });
 
   it('RemindersApi acks by booking id', () => {
@@ -57,6 +80,7 @@ describe('API services', () => {
     api.summary('2026-07-01', '2026-07-31').subscribe();
     const req = ctrl.expectOne((r) => r.url === '/api/reports/summary');
     expect(req.request.params.get('from')).toBe('2026-07-01');
+    expect(req.request.params.get('to')).toBe('2026-07-31');
     req.flush({ revenue: '0', forfeited_advances: '0', bookings: {} });
   });
 });
