@@ -1,9 +1,9 @@
-import { Router } from 'express';
+import { Router, type Request, type Response } from 'express';
 import { z } from 'zod';
 import { db } from '../db';
-import { forbidden, notFound } from '../errors';
+import { forbidden, invalidTransition, notFound } from '../errors';
 import { requireRole } from '../middleware/auth';
-import { istDateDaysAgo } from '../time';
+import { istDateDaysAgo, todayIST } from '../time';
 import { DATE_RE, PHONE_RE } from '../validation';
 
 /** Select-list for booking rows. booking_date is cast to text so it is always
@@ -78,6 +78,52 @@ const editSchema = z.object({
   end_time: z.string().datetime({ offset: true }),
   total_amount: z.number().positive(),
 }).partial().refine((p) => Object.keys(p).length > 0, { message: 'No fields to update' });
+
+type BookingStatus = 'confirmed' | 'arrived' | 'completed' | 'cancelled' | 'no_show';
+
+const TRANSITIONS: Record<string, BookingStatus[]> = {
+  confirmed: ['arrived', 'cancelled', 'no_show'],
+  arrived: ['completed'],
+};
+
+const cancelSchema = z.object({ reason: z.string().trim().max(500).optional() });
+
+/** 404 if the booking doesn't exist; 403 if a worker acts outside today/future. */
+export async function loadBookingForAction(req: Request, id: string): Promise<{ status: BookingStatus; actionable: boolean }> {
+  const rows = await db().query(
+    'SELECT status, booking_date >= $2::date AS actionable FROM bookings WHERE id = $1',
+    [id, todayIST()],
+  ) as Record<string, any>[];
+  const row = rows[0];
+  if (!row) throw notFound('Booking not found');
+  if (req.user!.role === 'worker' && !row.actionable) {
+    throw forbidden('Workers can only act on today or future bookings');
+  }
+  return row as { status: BookingStatus; actionable: boolean };
+}
+
+async function applyTransition(req: Request, res: Response, target: BookingStatus, forfeit: boolean) {
+  const id = req.params.id as string;
+  const current = await loadBookingForAction(req, id);
+  if (!(TRANSITIONS[current.status] ?? []).includes(target)) {
+    throw invalidTransition(current.status, target);
+  }
+  const reason = target === 'cancelled' ? (cancelSchema.parse(req.body ?? {}).reason ?? null) : null;
+  const rows = await db().query(
+    `UPDATE bookings SET status = $2,
+            advance_forfeited = advance_forfeited OR $3,
+            cancellation_reason = COALESCE($4, cancellation_reason),
+            updated_by = $5, updated_at = now()
+     WHERE id = $1 RETURNING ${BOOKING_COLS}`,
+    [id, target, forfeit, reason, req.user!.sub],
+  ) as Record<string, any>[];
+  res.json(rows[0]);
+}
+
+bookingsRouter.post('/:id/arrive', (req, res) => applyTransition(req, res, 'arrived', false));
+bookingsRouter.post('/:id/complete', (req, res) => applyTransition(req, res, 'completed', false));
+bookingsRouter.post('/:id/cancel', requireRole('owner'), (req, res) => applyTransition(req, res, 'cancelled', true));
+bookingsRouter.post('/:id/no-show', (req, res) => applyTransition(req, res, 'no_show', true));
 
 bookingsRouter.get('/:id', async (req, res) => {
   const rows = await db().query(
