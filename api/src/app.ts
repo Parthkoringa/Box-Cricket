@@ -1,5 +1,5 @@
 import express from 'express';
-import { requireAuth } from './middleware/auth';
+import { requireAuth, requireRole } from './middleware/auth';
 import { errorHandler } from './middleware/error-handler';
 import { authRouter } from './routes/auth';
 import { bookingsRouter } from './routes/bookings';
@@ -7,6 +7,7 @@ import { courtsRouter } from './routes/courts';
 import { itemsRouter } from './routes/items';
 import { paymentsRouter } from './routes/payments';
 import { remindersRouter } from './routes/reminders';
+import { reportsRouter } from './routes/reports';
 
 export const app = express();
 
@@ -23,6 +24,7 @@ app.use('/api/bookings', requireAuth, bookingsRouter);
 app.use('/api/payments', requireAuth, paymentsRouter);
 app.use('/api/items', requireAuth, itemsRouter);
 app.use('/api/reminders', requireAuth, remindersRouter);
+app.use('/api/reports', requireAuth, requireRole('owner'), reportsRouter);
 app.use('/api/auth', authRouter);
 
 app.use(errorHandler);
