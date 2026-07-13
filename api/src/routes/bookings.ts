@@ -125,6 +125,42 @@ bookingsRouter.post('/:id/complete', (req, res) => applyTransition(req, res, 'co
 bookingsRouter.post('/:id/cancel', requireRole('owner'), (req, res) => applyTransition(req, res, 'cancelled', true));
 bookingsRouter.post('/:id/no-show', (req, res) => applyTransition(req, res, 'no_show', true));
 
+const paymentSchema = z.object({
+  amount: z.number().positive(),
+  type: z.enum(['advance', 'remaining', 'extra']),
+  method: z.enum(['cash', 'upi']), // V1 accepts only these two (schema enum is wider)
+});
+
+const itemSchema = z.object({
+  item_name: z.string().trim().min(1).max(100),
+  quantity: z.number().int().min(1),
+  unit_price: z.number().min(0),
+});
+
+bookingsRouter.post('/:id/payments', async (req, res) => {
+  const p = paymentSchema.parse(req.body);
+  await loadBookingForAction(req, req.params.id);
+  const rows = await db().query(
+    `INSERT INTO payments (booking_id, amount, type, method, collected_by)
+     VALUES ($1, $2, $3, $4, $5)
+     RETURNING id, booking_id, amount, type, method, collected_by, paid_at`,
+    [req.params.id, p.amount, p.type, p.method, req.user!.sub],
+  ) as Record<string, any>[];
+  res.status(201).json(rows[0]);
+});
+
+bookingsRouter.post('/:id/items', async (req, res) => {
+  const i = itemSchema.parse(req.body);
+  await loadBookingForAction(req, req.params.id);
+  const rows = await db().query(
+    `INSERT INTO booking_items (booking_id, item_name, quantity, unit_price, added_by)
+     VALUES ($1, $2, $3, $4, $5)
+     RETURNING id, booking_id, item_name, quantity, unit_price, total_price, added_by, added_at`,
+    [req.params.id, i.item_name, i.quantity, i.unit_price, req.user!.sub],
+  ) as Record<string, any>[];
+  res.status(201).json(rows[0]);
+});
+
 bookingsRouter.get('/:id', async (req, res) => {
   const rows = await db().query(
     `SELECT ${BOOKING_COLS}, v.total_due, v.total_paid, v.balance_due,
