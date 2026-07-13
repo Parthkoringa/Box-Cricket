@@ -12,7 +12,7 @@ export const routes: Routes = [
     canActivate: [authGuard, roleGuard('owner')],
     children: [
       { path: 'bookings', loadComponent: () => import('./features/owner/bookings-list.component').then(m => m.BookingsListComponent) },
-      // Task 6: { path: 'bookings/:id', loadComponent: ... }
+      { path: 'bookings/:id', loadComponent: () => import('./features/bookings/booking-detail.component').then(m => m.BookingDetailComponent) },
       // Task 7: { path: 'reports', loadComponent: ... }
       // Task 8: { path: 'settings', loadComponent: ... }
       { path: '', pathMatch: 'full', redirectTo: 'bookings' },
@@ -24,7 +24,7 @@ export const routes: Routes = [
     canActivate: [authGuard, roleGuard('worker')],
     children: [
       // Task 9: { path: '', loadComponent: ... (dashboard) }
-      // Task 6: { path: 'bookings/:id', loadComponent: ... }
+      { path: 'bookings/:id', loadComponent: () => import('./features/bookings/booking-detail.component').then(m => m.BookingDetailComponent) },
     ],
   },
   { path: '', pathMatch: 'full', redirectTo: 'login' },
