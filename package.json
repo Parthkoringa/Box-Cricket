@@ -2,8 +2,11 @@
   "name": "box-cricket",
   "private": true,
   "type": "module",
-  "engines": { "node": ">=20" },
+  "engines": {
+    "node": ">=20"
+  },
   "scripts": {
+    "dev": "concurrently -n api,web \"npm run dev:api\" \"npm --prefix frontend run start\"",
     "dev:api": "tsx watch api/local-dev.ts",
     "test:api": "vitest run",
     "typecheck": "tsc --noEmit",
@@ -22,6 +25,7 @@
     "@types/jsonwebtoken": "^9.0.7",
     "@types/node": "^22.10.0",
     "@types/supertest": "^6.0.2",
+    "concurrently": "^10.0.3",
     "dotenv": "^16.4.7",
     "supertest": "^7.0.0",
     "tsx": "^4.19.2",
