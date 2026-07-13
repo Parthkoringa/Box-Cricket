@@ -151,7 +151,12 @@ export class BookingDetailComponent {
 
   edit(): void {
     this.dialog.open(BookingFormDialogComponent, { data: { booking: this.booking() }, maxWidth: '95vw' })
-      .afterClosed().subscribe((saved) => { if (saved) this.reload(); });
+      .afterClosed().subscribe((saved) => {
+        if (saved) {
+          this.snack.open('Booking updated', undefined, { duration: 2500 });
+          this.reload();
+        }
+      });
   }
 
   cancel(): void {
