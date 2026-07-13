@@ -1,8 +1,32 @@
 import { Routes } from '@angular/router';
+import { authGuard, roleGuard } from './core/guards';
 import { LoginComponent } from './features/login/login.component';
+import { OwnerShellComponent } from './features/owner/owner-shell.component';
+import { WorkerShellComponent } from './features/worker/worker-shell.component';
 
 export const routes: Routes = [
   { path: 'login', component: LoginComponent },
+  {
+    path: 'owner',
+    component: OwnerShellComponent,
+    canActivate: [authGuard, roleGuard('owner')],
+    children: [
+      // Task 5: { path: 'bookings', loadComponent: ... }
+      // Task 6: { path: 'bookings/:id', loadComponent: ... }
+      // Task 7: { path: 'reports', loadComponent: ... }
+      // Task 8: { path: 'settings', loadComponent: ... }
+      { path: '', pathMatch: 'full', redirectTo: 'bookings' },
+    ],
+  },
+  {
+    path: 'worker',
+    component: WorkerShellComponent,
+    canActivate: [authGuard, roleGuard('worker')],
+    children: [
+      // Task 9: { path: '', loadComponent: ... (dashboard) }
+      // Task 6: { path: 'bookings/:id', loadComponent: ... }
+    ],
+  },
   { path: '', pathMatch: 'full', redirectTo: 'login' },
   { path: '**', redirectTo: 'login' },
 ];
