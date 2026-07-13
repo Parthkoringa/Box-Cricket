@@ -11,7 +11,7 @@ export const routes: Routes = [
     component: OwnerShellComponent,
     canActivate: [authGuard, roleGuard('owner')],
     children: [
-      // Task 5: { path: 'bookings', loadComponent: ... }
+      { path: 'bookings', loadComponent: () => import('./features/owner/bookings-list.component').then(m => m.BookingsListComponent) },
       // Task 6: { path: 'bookings/:id', loadComponent: ... }
       // Task 7: { path: 'reports', loadComponent: ... }
       // Task 8: { path: 'settings', loadComponent: ... }
