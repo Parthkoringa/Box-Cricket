@@ -61,21 +61,17 @@ describe('GET /api/reminders', () => {
       .set('Authorization', `Bearer ${worker.token}`)).status).toBe(404);
   });
 
-  it('includes a booking 29 minutes out and excludes one 31 minutes out', async () => {
+  it('includes a booking 29 minutes out', async () => {
     const inWindow = await createStartingInMinutes(29);
-    // Create second booking 31 minutes out on next day to avoid court overlap
-    const start31 = new Date(Date.now() + 31 * 60_000 + 24 * 3600_000);
-    const res31 = await request(app).post('/api/bookings')
-      .set('Authorization', `Bearer ${owner.token}`)
-      .send(bookingPayload(court, {
-        booking_date: start31.toLocaleDateString('en-CA', { timeZone: 'Asia/Kolkata' }),
-        start_time: start31.toISOString(),
-        end_time: new Date(start31.getTime() + 2 * 3_600_000).toISOString(),
-      }));
-    expect(res31.status).toBe(201);
     const res = await request(app).get('/api/reminders').set('Authorization', `Bearer ${worker.token}`);
     expect(res.body).toHaveLength(1);
     expect(res.body[0].id).toBe(inWindow);
+  });
+
+  it('excludes a booking 31 minutes out', async () => {
+    await createStartingInMinutes(31);
+    const res = await request(app).get('/api/reminders').set('Authorization', `Bearer ${worker.token}`);
+    expect(res.body).toHaveLength(0);
   });
 
   it('excludes a booking whose start time has already passed', async () => {
