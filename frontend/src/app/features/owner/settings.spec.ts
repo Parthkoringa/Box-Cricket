@@ -34,6 +34,8 @@ describe('SettingsComponent', () => {
     expect(req.request.method).toBe('PATCH');
     expect(req.request.body.name).toBe('Renamed');
     expect('password' in req.request.body).toBe(false); // empty password not sent
+    expect(req.request.body.email).toBeNull();      // '' converts to null on the wire
+    expect(req.request.body.is_active).toBe(true);  // always included in the PATCH
     req.flush({ id: 'w1', name: 'Renamed', phone: '9000000002', email: null, role: 'worker', is_active: true });
   });
 
