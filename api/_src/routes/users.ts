@@ -38,6 +38,10 @@ usersRouter.patch('/:id', async (req, res) => {
     if (rows[0].role !== 'worker') throw forbidden('Only the worker account can be managed');
   }
 
+  if (isSelf && patch.is_active === false) {
+    throw forbidden('You cannot deactivate your own account');
+  }
+
   const cols: Record<string, unknown> = { ...patch };
   if (typeof cols.password === 'string') {
     cols.password_hash = await bcrypt.hash(cols.password, 10);

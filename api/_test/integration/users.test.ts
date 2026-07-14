@@ -22,6 +22,16 @@ describe('user management', () => {
       .set('Authorization', `Bearer ${worker.token}`)).status).toBe(403);
   });
 
+  it('owner cannot deactivate their own account', async () => {
+    const res = await request(app).patch(`/api/users/${owner.id}`)
+      .set('Authorization', `Bearer ${owner.token}`)
+      .send({ is_active: false });
+    expect(res.status).toBe(403);
+    const login = await request(app).post('/api/auth/login')
+      .send({ identifier: '9000000001', password: 'password123' });
+    expect(login.status).toBe(200);
+  });
+
   it('owner updates the worker name and deactivates the account; login then fails', async () => {
     const res = await request(app).patch(`/api/users/${worker.id}`)
       .set('Authorization', `Bearer ${owner.token}`)

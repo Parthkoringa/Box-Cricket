@@ -25,12 +25,18 @@ export class AuthService {
     const token = this.token;
     if (!token) return null;
     try {
-      const payload = JSON.parse(atob(token.split('.')[1]));
-      if (typeof payload.exp === 'number' && payload.exp * 1000 < Date.now()) return null;
-      return { id: payload.sub, role: payload.role, name: payload.name };
+      const payload = this.decodePayload(token.split('.')[1]);
+      if (typeof payload['exp'] === 'number' && payload['exp'] * 1000 < Date.now()) return null;
+      return { id: payload['sub'], role: payload['role'], name: payload['name'] } as AuthUser;
     } catch {
       return null;
     }
+  }
+
+  private decodePayload(segment: string): Record<string, unknown> {
+    const base64 = segment.replace(/-/g, '+').replace(/_/g, '/');
+    const bytes = Uint8Array.from(atob(base64), (c) => c.charCodeAt(0));
+    return JSON.parse(new TextDecoder().decode(bytes));
   }
 
   logout(): void {

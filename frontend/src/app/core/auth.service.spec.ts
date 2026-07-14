@@ -7,7 +7,10 @@ import { AuthService } from './auth.service';
 
 export function fakeJwt(payload: object, expiresInSec = 3600): string {
   const body = { ...payload, exp: Math.floor(Date.now() / 1000) + expiresInSec };
-  return ['header', btoa(JSON.stringify(body)), 'sig'].join('.');
+  const bytes = new TextEncoder().encode(JSON.stringify(body));
+  const binary = Array.from(bytes, (b) => String.fromCharCode(b)).join('');
+  const base64url = btoa(binary).replace(/\+/g, '-').replace(/\//g, '_');
+  return ['header', base64url, 'sig'].join('.');
 }
 
 // Real route target for '/login' so that logout()'s real router.navigate(['/login']) call
@@ -63,5 +66,10 @@ describe('AuthService', () => {
   it('homeFor maps roles to their landing routes', () => {
     expect(service.homeFor('owner')).toBe('/owner/bookings');
     expect(service.homeFor('worker')).toBe('/worker');
+  });
+
+  it('decodes a non-ASCII name from a base64url-encoded payload', () => {
+    localStorage.setItem('token', fakeJwt({ sub: 'u1', role: 'owner', name: 'પાર્થ' }));
+    expect(service.user?.name).toBe('પાર્થ');
   });
 });

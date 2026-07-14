@@ -52,6 +52,7 @@ production `DATABASE_URL` after deploying. There is no signup flow.
 
 ```bash
 npm install
+npm --prefix frontend install
 npm run dev        # API on :3000 + Angular on :4200 (proxies /api)
 ```
 
