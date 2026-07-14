@@ -59,7 +59,7 @@ Log in at http://localhost:4200 with a seeded phone/email + password.
 
 ```bash
 npm run test:api                                   # backend (Neon test branch)
-cd frontend && npm test -- --watch=false --browsers=ChromeHeadless
+cd frontend && npm test -- --watch=false          # Vitest (Angular 22 unit-test builder)
 ```
 
 ## 5. Deploy to Vercel
