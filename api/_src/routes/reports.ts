@@ -1,8 +1,8 @@
 import { Router } from 'express';
 import { z } from 'zod';
-import { db } from '../db';
-import { DATE_RE } from '../validation';
-import { BOOKING_COLS } from './bookings';
+import { db } from '../db.js';
+import { DATE_RE } from '../validation.js';
+import { BOOKING_COLS } from './bookings.js';
 
 const rangeSchema = z.object({
   from: z.string().regex(DATE_RE),

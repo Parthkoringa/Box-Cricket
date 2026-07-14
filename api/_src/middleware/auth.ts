@@ -1,7 +1,7 @@
 import type { RequestHandler } from 'express';
 import jwt from 'jsonwebtoken';
-import { config } from '../config';
-import { forbidden, unauthorized } from '../errors';
+import { config } from '../config.js';
+import { forbidden, unauthorized } from '../errors.js';
 
 export interface AuthUser {
   sub: string;

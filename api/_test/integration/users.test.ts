@@ -1,7 +1,7 @@
 import request from 'supertest';
 import { beforeAll, describe, expect, it } from 'vitest';
-import { app } from '../../_src/app';
-import { resetDb, seedUser, type TestUser } from '../helpers';
+import { app } from '../../_src/app.js';
+import { resetDb, seedUser, type TestUser } from '../helpers.js';
 
 let owner: TestUser;
 let worker: TestUser;

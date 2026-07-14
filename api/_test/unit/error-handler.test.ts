@@ -2,9 +2,9 @@ import express from 'express';
 import request from 'supertest';
 import { describe, expect, it } from 'vitest';
 import { z } from 'zod';
-import { notFound } from '../../_src/errors';
-import { errorHandler } from '../../_src/middleware/error-handler';
-import { app } from '../../_src/app';
+import { notFound } from '../../_src/errors.js';
+import { errorHandler } from '../../_src/middleware/error-handler.js';
+import { app } from '../../_src/app.js';
 
 function appWith(route: (req: express.Request, res: express.Response) => void) {
   const t = express();

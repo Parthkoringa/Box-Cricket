@@ -1,10 +1,10 @@
 import bcrypt from 'bcryptjs';
 import { Router } from 'express';
 import { z } from 'zod';
-import { db } from '../db';
-import { forbidden, notFound } from '../errors';
-import { requireRole } from '../middleware/auth';
-import { PHONE_RE } from '../validation';
+import { db } from '../db.js';
+import { forbidden, notFound } from '../errors.js';
+import { requireRole } from '../middleware/auth.js';
+import { PHONE_RE } from '../validation.js';
 
 const updateSchema = z.object({
   name: z.string().trim().min(1).max(100).optional(),

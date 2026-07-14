@@ -1,14 +1,14 @@
 import express from 'express';
-import { requireAuth, requireRole } from './middleware/auth';
-import { errorHandler } from './middleware/error-handler';
-import { authRouter } from './routes/auth';
-import { bookingsRouter } from './routes/bookings';
-import { courtsRouter } from './routes/courts';
-import { itemsRouter } from './routes/items';
-import { paymentsRouter } from './routes/payments';
-import { remindersRouter } from './routes/reminders';
-import { reportsRouter } from './routes/reports';
-import { usersRouter } from './routes/users';
+import { requireAuth, requireRole } from './middleware/auth.js';
+import { errorHandler } from './middleware/error-handler.js';
+import { authRouter } from './routes/auth.js';
+import { bookingsRouter } from './routes/bookings.js';
+import { courtsRouter } from './routes/courts.js';
+import { itemsRouter } from './routes/items.js';
+import { paymentsRouter } from './routes/payments.js';
+import { remindersRouter } from './routes/reminders.js';
+import { reportsRouter } from './routes/reports.js';
+import { usersRouter } from './routes/users.js';
 
 export const app = express();
 

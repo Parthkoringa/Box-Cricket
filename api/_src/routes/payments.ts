@@ -1,7 +1,7 @@
 import { Router } from 'express';
-import { db } from '../db';
-import { notFound } from '../errors';
-import { requireRole } from '../middleware/auth';
+import { db } from '../db.js';
+import { notFound } from '../errors.js';
+import { requireRole } from '../middleware/auth.js';
 
 export const paymentsRouter = Router();
 

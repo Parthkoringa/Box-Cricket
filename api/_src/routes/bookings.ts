@@ -1,10 +1,10 @@
 import { Router, type Request, type Response } from 'express';
 import { z } from 'zod';
-import { db } from '../db';
-import { forbidden, invalidTransition, notFound } from '../errors';
-import { requireRole } from '../middleware/auth';
-import { istDateDaysAgo, todayIST } from '../time';
-import { DATE_RE, PHONE_RE } from '../validation';
+import { db } from '../db.js';
+import { forbidden, invalidTransition, notFound } from '../errors.js';
+import { requireRole } from '../middleware/auth.js';
+import { istDateDaysAgo, todayIST } from '../time.js';
+import { DATE_RE, PHONE_RE } from '../validation.js';
 
 /** Select-list for booking rows. booking_date is cast to text so it is always
  *  a plain 'YYYY-MM-DD' string in JSON, never a driver-parsed Date. */

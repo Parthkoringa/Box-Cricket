@@ -1,8 +1,8 @@
 import request from 'supertest';
 import { beforeAll, beforeEach, describe, expect, it } from 'vitest';
-import { app } from '../../_src/app';
-import { db } from '../../_src/db';
-import { bookingPayload, courtId, resetDb, seedUser, type TestUser } from '../helpers';
+import { app } from '../../_src/app.js';
+import { db } from '../../_src/db.js';
+import { bookingPayload, courtId, resetDb, seedUser, type TestUser } from '../helpers.js';
 
 let owner: TestUser;
 let worker: TestUser;

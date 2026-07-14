@@ -2,9 +2,9 @@ import bcrypt from 'bcryptjs';
 import { Router } from 'express';
 import jwt from 'jsonwebtoken';
 import { z } from 'zod';
-import { config } from '../config';
-import { db } from '../db';
-import { unauthorized } from '../errors';
+import { config } from '../config.js';
+import { db } from '../db.js';
+import { unauthorized } from '../errors.js';
 
 const loginSchema = z.object({
   identifier: z.string().min(1),

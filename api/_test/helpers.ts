@@ -1,7 +1,7 @@
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
-import { config } from '../_src/config';
-import { db } from '../_src/db';
+import { config } from '../_src/config.js';
+import { db } from '../_src/db.js';
 
 export interface TestUser {
   id: string;

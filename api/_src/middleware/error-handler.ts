@@ -1,6 +1,6 @@
 import type { ErrorRequestHandler } from 'express';
 import { ZodError } from 'zod';
-import { AppError } from '../errors';
+import { AppError } from '../errors.js';
 
 const OVERLAP_MESSAGE = 'This time slot overlaps an existing booking on this court.';
 

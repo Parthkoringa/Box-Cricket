@@ -2,12 +2,12 @@ import express from 'express';
 import jwt from 'jsonwebtoken';
 import request from 'supertest';
 import { beforeAll, describe, expect, it } from 'vitest';
-import { app } from '../../_src/app';
-import { config } from '../../_src/config';
-import { db } from '../../_src/db';
-import { errorHandler } from '../../_src/middleware/error-handler';
-import { requireAuth, requireRole } from '../../_src/middleware/auth';
-import { resetDb, seedUser } from '../helpers';
+import { app } from '../../_src/app.js';
+import { config } from '../../_src/config.js';
+import { db } from '../../_src/db.js';
+import { errorHandler } from '../../_src/middleware/error-handler.js';
+import { requireAuth, requireRole } from '../../_src/middleware/auth.js';
+import { resetDb, seedUser } from '../helpers.js';
 
 describe('POST /api/auth/login', () => {
   beforeAll(async () => {
