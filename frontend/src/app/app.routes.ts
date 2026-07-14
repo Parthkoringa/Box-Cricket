@@ -23,7 +23,7 @@ export const routes: Routes = [
     component: WorkerShellComponent,
     canActivate: [authGuard, roleGuard('worker')],
     children: [
-      // Task 9: { path: '', loadComponent: ... (dashboard) }
+      { path: '', loadComponent: () => import('./features/worker/worker-dashboard.component').then(m => m.WorkerDashboardComponent) },
       { path: 'bookings/:id', loadComponent: () => import('./features/bookings/booking-detail.component').then(m => m.BookingDetailComponent) },
     ],
   },
