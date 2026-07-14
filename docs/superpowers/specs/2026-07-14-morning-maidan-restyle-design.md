@@ -77,9 +77,15 @@ closest to teal as the base; our overrides win.
   + `n bookings · ₹X due` summary (sum of `balance_due` — display only,
   computed from the strings via Number()).
 - **Rows** inside a white rounded container: time rail (start/end stacked,
-  Bricolage teal, sand right-border) · name + phone (ellipsized) · status dot
-  · due amount (or PAID / CANCELLED / NO-SHOW word in status color). Row
-  height ~52px; hover tints teal-soft; whole row navigates to detail.
+  Bricolage teal, sand right-border) · name + phone (ellipsized) · a compact
+  **labeled status pill** (text + tint, e.g. `CONFIRMED`, `ARRIVED`, `DONE`,
+  `CANCELLED`, `NO-SHOW`) · payment state as **words + amount** (`₹540 due`
+  in teal, `PAID` in green, `FORFEITED` in red). Row height ~52px; hover
+  tints teal-soft; whole row navigates to detail.
+- **Color is never the sole status carrier** (visibility in sunlight,
+  color-blind safety): every status/payment indicator pairs its tint with
+  explicit text; the tiny dot may appear as decoration next to the pill but
+  never alone.
 - The worker's **Today** section keeps larger tappable cards (few items,
   action-focused) restyled to the new tokens.
 - Label logic (`Today`/`Tomorrow`/weekday+date) lives in a small exported
