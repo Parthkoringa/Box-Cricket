@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
-import { config } from '../../src/config';
-import { AppError, forbidden, invalidTransition, notFound, unauthorized } from '../../src/errors';
-import { istDateDaysAgo, todayIST } from '../../src/time';
+import { config } from '../../_src/config';
+import { AppError, forbidden, invalidTransition, notFound, unauthorized } from '../../_src/errors';
+import { istDateDaysAgo, todayIST } from '../../_src/time';
 
 describe('config', () => {
   it('exposes env-backed values', () => {

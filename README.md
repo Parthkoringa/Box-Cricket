@@ -11,7 +11,9 @@ serverless function · Neon Postgres · JWT auth.
 ## Repo layout
 
 - `db/` — `schema.sql` (locked schema, applied manually) and `seed-users.ts`
-- `api/` — Express backend; `api/index.ts` is the Vercel function entry
+- `api/` — Express backend; `api/index.ts` is the Vercel function entry. Backend
+  code lives under `api/_src/` (tests under `api/_test/`) — the leading
+  underscore keeps Vercel from turning internals into their own functions.
 - `frontend/` — Angular SPA
 - `docs/` — planning docs, design spec, implementation plans
 

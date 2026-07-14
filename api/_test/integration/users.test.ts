@@ -1,6 +1,6 @@
 import request from 'supertest';
 import { beforeAll, describe, expect, it } from 'vitest';
-import { app } from '../../src/app';
+import { app } from '../../_src/app';
 import { resetDb, seedUser, type TestUser } from '../helpers';
 
 let owner: TestUser;

@@ -2,11 +2,11 @@ import express from 'express';
 import jwt from 'jsonwebtoken';
 import request from 'supertest';
 import { beforeAll, describe, expect, it } from 'vitest';
-import { app } from '../../src/app';
-import { config } from '../../src/config';
-import { db } from '../../src/db';
-import { errorHandler } from '../../src/middleware/error-handler';
-import { requireAuth, requireRole } from '../../src/middleware/auth';
+import { app } from '../../_src/app';
+import { config } from '../../_src/config';
+import { db } from '../../_src/db';
+import { errorHandler } from '../../_src/middleware/error-handler';
+import { requireAuth, requireRole } from '../../_src/middleware/auth';
 import { resetDb, seedUser } from '../helpers';
 
 describe('POST /api/auth/login', () => {
