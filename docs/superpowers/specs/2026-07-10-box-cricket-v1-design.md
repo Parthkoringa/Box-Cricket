@@ -120,7 +120,7 @@ All other routes require `requireAuth`; owner-only routes add `requireRole('owne
 | `GET /reminders` | worker | reminder query above |
 | `POST /reminders/:bookingId/ack` | worker | acknowledge |
 | `GET /reports/summary?from=&to=` | owner | revenue, booking counts, forfeited advances |
-| `GET /reports/pending` | owner | non-cancelled bookings with `balance_due > 0` |
+| `GET /reports/pending` | owner | bookings with `balance_due > 0`, excluding `cancelled` and `no_show` (a no-show's balance is uncollectable; its advance is already forfeited) |
 | `GET /reports/trends?from=&to=` | owner | bookings + revenue per day |
 | `GET /users/worker` | owner | view worker account |
 | `PATCH /users/:id` | owner | update worker (name/phone/email/password/`is_active`) or own password |
