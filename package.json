@@ -8,6 +8,7 @@
   "scripts": {
     "dev": "concurrently -n api,web \"npm run dev:api\" \"npm --prefix frontend run start\"",
     "dev:api": "tsx watch api/local-dev.ts",
+    "build": "npm --prefix frontend install && npm --prefix frontend run build",
     "test:api": "vitest run",
     "typecheck": "tsc --noEmit",
     "seed:users": "tsx db/seed-users.ts"
