@@ -14,7 +14,7 @@ export const routes: Routes = [
       { path: 'bookings', loadComponent: () => import('./features/owner/bookings-list.component').then(m => m.BookingsListComponent) },
       { path: 'bookings/:id', loadComponent: () => import('./features/bookings/booking-detail.component').then(m => m.BookingDetailComponent) },
       { path: 'reports', loadComponent: () => import('./features/owner/reports.component').then(m => m.ReportsComponent) },
-      // Task 8: { path: 'settings', loadComponent: ... }
+      { path: 'settings', loadComponent: () => import('./features/owner/settings.component').then(m => m.SettingsComponent) },
       { path: '', pathMatch: 'full', redirectTo: 'bookings' },
     ],
   },
