@@ -8,15 +8,8 @@ const LABELS: Record<BookingStatus, string> = {
 
 @Component({
   selector: 'status-chip',
-  template: `<span class="chip" [class]="status">{{ label }}</span>`,
-  styles: `
-    .chip { padding: 2px 10px; border-radius: 12px; font-size: 12px; font-weight: 500; white-space: nowrap; }
-    .confirmed { background: #e3f2fd; color: #1565c0; }
-    .arrived { background: #fff8e1; color: #b26a00; }
-    .completed { background: #e8f5e9; color: #2e7d32; }
-    .cancelled { background: #fbe9e7; color: #c62828; }
-    .no_show { background: #efebe9; color: #5d4037; }
-  `,
+  template: `<span class="bc-pill bc-pill--{{ status }}">{{ label }}</span>`,
+  styles: ``,
 })
 export class StatusChipComponent {
   @Input({ required: true }) status!: BookingStatus;

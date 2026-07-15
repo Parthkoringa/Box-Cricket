@@ -1,4 +1,4 @@
-import { composeRange, plusTwoHours, toTimeInput, todayLocal } from './booking-time';
+import { composeRange, dayLabel, plusTwoHours, toTimeInput, todayLocal } from './booking-time';
 
 describe('booking-time helpers', () => {
   it('plusTwoHours adds two hours', () => {
@@ -28,5 +28,13 @@ describe('booking-time helpers', () => {
   it('toTimeInput extracts local HH:mm from an ISO string', () => {
     const { start_time } = composeRange('2026-07-15', '09:05', '11:00');
     expect(toTimeInput(start_time)).toBe('09:05');
+  });
+
+  describe('dayLabel', () => {
+    it('labels today, tomorrow, and other days', () => {
+      expect(dayLabel('2026-07-14', '2026-07-14')).toBe('Today');
+      expect(dayLabel('2026-07-15', '2026-07-14')).toBe('Tomorrow');
+      expect(dayLabel('2026-07-18', '2026-07-14')).toBe('Sat 18 Jul');
+    });
   });
 });

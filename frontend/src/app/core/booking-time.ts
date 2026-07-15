@@ -25,3 +25,14 @@ export function composeRange(date: string, start: string, end: string): { start_
   if (endDate <= startDate) endDate = new Date(endDate.getTime() + 86_400_000);
   return { start_time: startDate.toISOString(), end_time: endDate.toISOString() };
 }
+
+/** 'Today' / 'Tomorrow' / 'Sat 18 Jul' — labels for day-group headers. */
+export function dayLabel(date: string, today: string): string {
+  if (date === today) return 'Today';
+  const next = new Date(`${today}T12:00:00`);
+  next.setDate(next.getDate() + 1);
+  if (date === next.toLocaleDateString('en-CA')) return 'Tomorrow';
+  return new Date(`${date}T12:00:00`).toLocaleDateString('en-GB', {
+    weekday: 'short', day: 'numeric', month: 'short',
+  });
+}
