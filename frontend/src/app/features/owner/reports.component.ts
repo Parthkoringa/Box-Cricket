@@ -11,6 +11,7 @@ import { BaseChartDirective } from 'ng2-charts';
 import { ReportsApi } from '../../core/api';
 import { todayLocal } from '../../core/booking-time';
 import { Booking, ReportSummary, TrendPoint } from '../../core/models';
+import { CountUpDirective } from '../../shared/count-up.directive';
 import { InrPipe } from '../../shared/inr.pipe';
 import { StatusChipComponent } from '../../shared/status-chip.component';
 
@@ -18,7 +19,7 @@ import { StatusChipComponent } from '../../shared/status-chip.component';
   selector: 'app-reports',
   imports: [
     ReactiveFormsModule, DatePipe, InrPipe, StatusChipComponent, RouterLink,
-    MatCardModule, MatFormFieldModule, MatInputModule, BaseChartDirective,
+    MatCardModule, MatFormFieldModule, MatInputModule, BaseChartDirective, CountUpDirective,
   ],
   template: `
     <div class="range">
@@ -33,20 +34,11 @@ import { StatusChipComponent } from '../../shared/status-chip.component';
     </div>
 
     @if (summary(); as s) {
-      <div class="cards">
-        <mat-card appearance="outlined"><mat-card-content>
-          <span class="label">Revenue</span><strong>{{ s.revenue | inr }}</strong>
-        </mat-card-content></mat-card>
-        <mat-card appearance="outlined"><mat-card-content>
-          <span class="label">Forfeited advances</span><strong>{{ s.forfeited_advances | inr }}</strong>
-        </mat-card-content></mat-card>
-        <mat-card appearance="outlined"><mat-card-content>
-          <span class="label">Completed</span><strong>{{ s.bookings.completed ?? 0 }}</strong>
-        </mat-card-content></mat-card>
-        <mat-card appearance="outlined"><mat-card-content>
-          <span class="label">Cancelled / no-show</span>
-          <strong>{{ (s.bookings.cancelled ?? 0) + (s.bookings.no_show ?? 0) }}</strong>
-        </mat-card-content></mat-card>
+      <div class="statgrid bc-stagger">
+        <div class="stat bc-card"><small>Revenue</small><b [bcCountUp]="s.revenue" bcPrefix="₹"></b></div>
+        <div class="stat bc-card gold"><small>Forfeited advances</small><b [bcCountUp]="s.forfeited_advances" bcPrefix="₹"></b></div>
+        <div class="stat bc-card"><small>Completed</small><b [bcCountUp]="s.bookings.completed ?? 0"></b></div>
+        <div class="stat bc-card"><small>Cancelled / no-show</small><b [bcCountUp]="(s.bookings.cancelled ?? 0) + (s.bookings.no_show ?? 0)"></b></div>
       </div>
     }
 
@@ -81,16 +73,25 @@ import { StatusChipComponent } from '../../shared/status-chip.component';
   styles: `
     :host { display: flex; flex-direction: column; gap: 12px; }
     .range { display: flex; gap: 8px; flex-wrap: wrap; }
-    .cards { display: grid; gap: 8px; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); }
-    .cards mat-card-content { display: flex; flex-direction: column; }
-    .label { font-size: 12px; opacity: 0.7; }
-    .cards strong { font-size: 22px; }
+    .statgrid { display: grid; gap: 10px; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); }
+    .stat { padding: 14px 16px; position: relative; overflow: hidden; display: flex; flex-direction: column; }
+    .stat::after {
+      content: ''; position: absolute; right: -18px; top: -18px;
+      width: 54px; height: 54px; border-radius: 50%; background: var(--bc-teal-soft);
+    }
+    .stat small { font-size: 10px; letter-spacing: 0.13em; text-transform: uppercase; color: var(--bc-muted); font-weight: 700; margin-bottom: 5px; }
+    .stat b { font-family: var(--bc-font-display); font-weight: 800; font-size: 26px; color: var(--bc-teal); }
+    .stat.gold b { color: var(--bc-gold); }
+    .stat.gold::after { background: var(--bc-gold-soft); }
+    mat-card { border: none; }
+    h3 { margin: 0 0 8px; font-size: 15px; font-weight: 800; }
     .scroll { overflow-x: auto; }
     table { width: 100%; border-collapse: collapse; }
-    th, td { text-align: left; padding: 8px; border-bottom: 1px solid rgba(0 0 0 / 10%); white-space: nowrap; }
-    tbody tr { cursor: pointer; }
-    .empty { opacity: 0.6; text-align: center; }
-    h3 { margin: 0 0 8px; }
+    th { text-align: left; padding: 8px; font-size: 10.5px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--bc-teal); border-bottom: 2px solid var(--bc-sand); white-space: nowrap; }
+    td { text-align: left; padding: 9px 8px; border-bottom: 1px solid #f1ede2; white-space: nowrap; font-size: 13px; }
+    tbody tr { cursor: pointer; transition: background 0.12s ease; }
+    tbody tr:hover { background: var(--bc-teal-soft); }
+    .empty { color: var(--bc-muted); text-align: center; }
   `,
 })
 export class ReportsComponent {
@@ -126,8 +127,22 @@ export class ReportsComponent {
     this.chartData = {
       labels: points.map((p) => p.day),
       datasets: [
-        { label: 'Revenue (₹)', data: points.map((p) => Number(p.revenue)), yAxisID: 'y', tension: 0.3 },
-        { label: 'Bookings', data: points.map((p) => p.bookings), yAxisID: 'bookings', tension: 0.3 },
+        {
+          label: 'Revenue (₹)', data: points.map((p) => Number(p.revenue)), yAxisID: 'y',
+          tension: 0.35, borderColor: '#0f4c5c', borderWidth: 2.5, pointRadius: 0, fill: true,
+          backgroundColor: (ctx: { chart: { ctx: CanvasRenderingContext2D | null; height: number } }) => {
+            const c = ctx.chart.ctx;
+            if (!c || typeof c.createLinearGradient !== 'function') return 'rgba(15,76,92,.15)';
+            const g = c.createLinearGradient(0, 0, 0, ctx.chart.height || 200);
+            g.addColorStop(0, 'rgba(15,76,92,.30)');
+            g.addColorStop(1, 'rgba(15,76,92,0)');
+            return g;
+          },
+        },
+        {
+          label: 'Bookings', data: points.map((p) => p.bookings), yAxisID: 'bookings',
+          tension: 0.35, borderColor: '#e0a52e', borderWidth: 2, pointRadius: 0, borderDash: [5, 4],
+        },
       ],
     };
   }
