@@ -11,7 +11,8 @@
     "build": "npm --prefix frontend install && npm --prefix frontend run build",
     "test:api": "vitest run",
     "typecheck": "tsc --noEmit",
-    "seed:users": "tsx db/seed-users.ts"
+    "seed:users": "tsx db/seed-users.ts",
+    "seed:demo": "tsx db/seed-demo.ts"
   },
   "dependencies": {
     "@neondatabase/serverless": "^1.0.0",
