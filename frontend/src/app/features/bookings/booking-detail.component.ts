@@ -24,88 +24,107 @@ import { PaymentDialogComponent, PaymentDialogResult } from './payment-dialog.co
   imports: [DatePipe, InrPipe, StatusChipComponent, MatCardModule, MatButtonModule, MatIconModule],
   template: `
     @if (booking(); as b) {
-      <mat-card appearance="outlined">
-        <mat-card-content>
-          <div class="head">
-            <h2>{{ b.customer_name }}</h2>
-            <status-chip [status]="b.status" />
-          </div>
-          <p>{{ b.start_time | date: 'EEEE d MMM y, h:mm a' }} – {{ b.end_time | date: 'h:mm a' }}</p>
-          <p>{{ b.customer_phone }}</p>
-          @if (b.cancellation_reason) { <p>Reason: {{ b.cancellation_reason }}</p> }
-          @if (b.advance_forfeited) { <p class="forfeit">Advance forfeited</p> }
-          <div class="balances">
-            <div><span>Total due</span><strong>{{ b.total_due | inr }}</strong></div>
-            <div><span>Paid</span><strong>{{ b.total_paid | inr }}</strong></div>
-            <div><span>Balance</span><strong>{{ b.balance_due | inr }}</strong></div>
-          </div>
-          <div class="actions">
-            @if (can('arrive')) { <button mat-flat-button (click)="run(api.arrive(b.id))">Mark arrived</button> }
-            @if (can('complete')) { <button mat-flat-button (click)="run(api.complete(b.id))">Mark completed</button> }
-            @if (can('no_show')) { <button mat-stroked-button (click)="run(api.noShow(b.id))">No-show</button> }
-            @if (can('edit')) { <button mat-stroked-button (click)="edit()">Edit</button> }
-            @if (can('cancel')) { <button mat-stroked-button (click)="cancel()">Cancel booking</button> }
-          </div>
-        </mat-card-content>
-      </mat-card>
-
-      <mat-card appearance="outlined">
-        <mat-card-content>
-          <div class="head">
-            <h3>Payments</h3>
-            @if (can('add_payment')) { <button mat-stroked-button (click)="addPayment()">Add payment</button> }
-          </div>
-          @for (p of b.payments; track p.id) {
-            <div class="rowline">
-              <span>{{ p.paid_at | date: 'd MMM, h:mm a' }} · {{ p.type }} · {{ p.method }}</span>
-              <span class="amount">
-                {{ p.amount | inr }}
-                @if (can('delete_entries')) {
-                  <button mat-icon-button data-test="delete-payment" aria-label="Delete payment" (click)="deletePayment(p.id)">
-                    <mat-icon>delete</mat-icon>
-                  </button>
-                }
-              </span>
+      <div class="bc-stagger">
+        <mat-card appearance="outlined" class="bc-card">
+          <mat-card-content>
+            <div class="head">
+              <h2>{{ b.customer_name }}</h2>
+              <status-chip [status]="b.status" />
             </div>
-          } @empty { <p class="empty">No payments yet.</p> }
-        </mat-card-content>
-      </mat-card>
-
-      <mat-card appearance="outlined">
-        <mat-card-content>
-          <div class="head">
-            <h3>Extra items</h3>
-            @if (can('add_item')) { <button mat-stroked-button (click)="addItem()">Add item</button> }
-          </div>
-          @for (i of b.items; track i.id) {
-            <div class="rowline">
-              <span>{{ i.item_name }} × {{ i.quantity }}</span>
-              <span class="amount">
-                {{ i.total_price | inr }}
-                @if (can('delete_entries')) {
-                  <button mat-icon-button data-test="delete-item" aria-label="Delete item" (click)="deleteItem(i.id)">
-                    <mat-icon>delete</mat-icon>
-                  </button>
-                }
-              </span>
+            <p>{{ b.start_time | date: 'EEEE d MMM y, h:mm a' }} – {{ b.end_time | date: 'h:mm a' }}</p>
+            <p>{{ b.customer_phone }}</p>
+            @if (b.cancellation_reason) { <p>Reason: {{ b.cancellation_reason }}</p> }
+            @if (b.advance_forfeited) { <p class="forfeit">Advance forfeited</p> }
+            <div class="balances">
+              <div><span>Total due</span><strong class="bc-money">{{ b.total_due | inr }}</strong></div>
+              <div><span>Paid</span><strong class="bc-money green">{{ b.total_paid | inr }}</strong></div>
+              <div class="hero"><span>Balance</span><strong class="bc-money">{{ b.balance_due | inr }}</strong></div>
             </div>
-          } @empty { <p class="empty">No extra items.</p> }
-        </mat-card-content>
-      </mat-card>
+            <div class="actions">
+              @if (can('arrive')) { <button mat-flat-button (click)="run(api.arrive(b.id))">Mark arrived</button> }
+              @if (can('complete')) { <button mat-flat-button (click)="run(api.complete(b.id))">Mark completed</button> }
+              @if (can('no_show')) { <button mat-stroked-button (click)="run(api.noShow(b.id))">No-show</button> }
+              @if (can('edit')) { <button mat-stroked-button (click)="edit()">Edit</button> }
+              @if (can('cancel')) { <button mat-stroked-button (click)="cancel()">Cancel booking</button> }
+            </div>
+          </mat-card-content>
+        </mat-card>
+
+        <mat-card appearance="outlined" class="bc-card">
+          <mat-card-content>
+            <div class="head">
+              <h3>Payments</h3>
+              @if (can('add_payment')) { <button mat-stroked-button (click)="addPayment()">Add payment</button> }
+            </div>
+            @for (p of b.payments; track p.id) {
+              <div class="rowline">
+                <span>{{ p.paid_at | date: 'd MMM, h:mm a' }} · {{ p.type }} · {{ p.method }}</span>
+                <span class="amount">
+                  {{ p.amount | inr }}
+                  @if (can('delete_entries')) {
+                    <button mat-icon-button data-test="delete-payment" aria-label="Delete payment" (click)="deletePayment(p.id)">
+                      <mat-icon>delete</mat-icon>
+                    </button>
+                  }
+                </span>
+              </div>
+            } @empty { <p class="empty">No payments yet.</p> }
+          </mat-card-content>
+        </mat-card>
+
+        <mat-card appearance="outlined" class="bc-card">
+          <mat-card-content>
+            <div class="head">
+              <h3>Extra items</h3>
+              @if (can('add_item')) { <button mat-stroked-button (click)="addItem()">Add item</button> }
+            </div>
+            @for (i of b.items; track i.id) {
+              <div class="rowline">
+                <span>{{ i.item_name }} × {{ i.quantity }}</span>
+                <span class="amount">
+                  {{ i.total_price | inr }}
+                  @if (can('delete_entries')) {
+                    <button mat-icon-button data-test="delete-item" aria-label="Delete item" (click)="deleteItem(i.id)">
+                      <mat-icon>delete</mat-icon>
+                    </button>
+                  }
+                </span>
+              </div>
+            } @empty { <p class="empty">No extra items.</p> }
+          </mat-card-content>
+        </mat-card>
+      </div>
     }
   `,
   styles: `
     :host { display: flex; flex-direction: column; gap: 12px; }
+    mat-card { border: none; }
     .head { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
-    h2, h3 { margin: 0; }
-    .balances { display: flex; gap: 24px; margin: 12px 0; flex-wrap: wrap; }
-    .balances div { display: flex; flex-direction: column; }
-    .balances span { font-size: 12px; opacity: 0.7; }
+    h2 { margin: 0; font-size: 24px; font-weight: 800; }
+    h3 { margin: 0; font-size: 15px; font-weight: 800; }
+    .balances {
+      display: flex; gap: 10px; margin: 14px 0; flex-wrap: wrap;
+    }
+    .balances > div {
+      flex: 1; min-width: 90px;
+      background: var(--bc-paper); border: 1px solid var(--bc-line);
+      border-radius: 12px; padding: 10px 12px;
+      display: flex; flex-direction: column;
+    }
+    .balances > div.hero { background: var(--bc-teal-soft); border-color: rgba(15, 76, 92, 0.2); }
+    .balances span { font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--bc-muted); font-weight: 700; }
+    .balances strong { font-size: 22px; }
+    .balances strong.green { color: var(--bc-green); }
     .actions { display: flex; gap: 8px; flex-wrap: wrap; }
-    .rowline { display: flex; justify-content: space-between; align-items: center; padding: 4px 0; }
-    .amount { display: flex; align-items: center; gap: 4px; }
-    .forfeit { color: #c62828; font-weight: 500; }
-    .empty { opacity: 0.6; }
+    .actions button { border-radius: 10px; }
+    .rowline {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 8px 0; border-bottom: 1px solid #f1ede2;
+    }
+    .rowline:last-of-type { border-bottom: none; }
+    .amount { display: flex; align-items: center; gap: 4px; font-family: var(--bc-font-display); font-weight: 700; color: var(--bc-teal); }
+    .forfeit { color: var(--bc-red); font-weight: 700; }
+    .empty { color: var(--bc-muted); }
   `,
 })
 export class BookingDetailComponent {

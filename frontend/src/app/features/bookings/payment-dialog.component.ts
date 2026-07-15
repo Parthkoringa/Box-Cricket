@@ -40,7 +40,11 @@ export interface PaymentDialogResult { amount: number; type: PaymentType; method
       <button mat-flat-button form="payment-form" type="submit" [disabled]="form.invalid">Save</button>
     </mat-dialog-actions>
   `,
-  styles: `form { display: flex; flex-direction: column; gap: 8px; min-width: min(320px, 80vw); }`,
+  styles: `
+    form { display: flex; flex-direction: column; gap: 10px; min-width: min(320px, 80vw); }
+    mat-dialog-title { font-family: var(--bc-font-display); font-weight: 800; color: var(--bc-teal); }
+    mat-dialog-actions button { border-radius: 10px; }
+  `,
 })
 export class PaymentDialogComponent {
   private fb = inject(NonNullableFormBuilder);

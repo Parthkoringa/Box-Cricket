@@ -22,7 +22,12 @@ import { MatInputModule } from '@angular/material/input';
       <button mat-flat-button [mat-dialog-close]="{ confirmed: true, reason: reason.value }">Cancel booking</button>
     </mat-dialog-actions>
   `,
-  styles: `.full { width: 100%; }`,
+  styles: `
+    .full { width: 100%; }
+    mat-dialog-title { font-family: var(--bc-font-display); font-weight: 800; color: var(--bc-teal); }
+    mat-dialog-actions button { border-radius: 10px; }
+    mat-dialog-actions button:last-of-type { background: var(--bc-red); color: #fff; }
+  `,
 })
 export class CancelDialogComponent {
   reason = new FormControl('', { nonNullable: true });

@@ -36,8 +36,10 @@ export interface ItemDialogResult { item_name: string; quantity: number; unit_pr
     </mat-dialog-actions>
   `,
   styles: `
-    form { display: flex; flex-direction: column; gap: 8px; min-width: min(320px, 80vw); }
+    form { display: flex; flex-direction: column; gap: 10px; min-width: min(320px, 80vw); }
     .row { display: flex; gap: 8px; } .row mat-form-field { flex: 1; }
+    mat-dialog-title { font-family: var(--bc-font-display); font-weight: 800; color: var(--bc-teal); }
+    mat-dialog-actions button { border-radius: 10px; }
   `,
 })
 export class ItemDialogComponent {
