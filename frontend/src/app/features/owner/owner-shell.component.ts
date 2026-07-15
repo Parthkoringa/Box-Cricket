@@ -43,7 +43,11 @@ import { AuthService } from '../../core/auth.service';
     }
     .spacer { flex: 1; }
     main { padding: 16px; max-width: 1100px; margin: 0 auto; }
-    @media (max-width: 600px) { .logo { font-size: 16px; } main { padding: 8px; } }
+    @media (max-width: 600px) {
+      .logo { font-size: 16px; }
+      main { padding: 8px; }
+      nav a { min-width: 0; padding: 0 8px; font-size: 13px; }
+    }
   `,
 })
 export class OwnerShellComponent {
