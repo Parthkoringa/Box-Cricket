@@ -56,7 +56,17 @@ import { WorkerAccount } from '../../core/models';
   styles: `
     :host { display: flex; flex-direction: column; gap: 12px; max-width: 480px; }
     form { display: flex; flex-direction: column; gap: 8px; }
-    button { align-self: flex-start; }
+    button { align-self: flex-start; border-radius: 10px; }
+    mat-card {
+      border: none;
+      box-shadow: var(--bc-shadow);
+      border-radius: var(--bc-radius);
+    }
+    mat-card-title {
+      font-family: var(--bc-font-display);
+      font-weight: 800;
+      color: var(--bc-teal);
+    }
   `,
 })
 export class SettingsComponent {
