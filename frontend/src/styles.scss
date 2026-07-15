@@ -70,7 +70,6 @@ h1, h2, h3, h4 { font-family: var(--bc-font-display); color: var(--bc-teal); }
   background: var(--bc-card);
   border-radius: var(--bc-radius);
   box-shadow: var(--bc-shadow);
-  transition: transform 0.15s ease, box-shadow 0.15s ease;
 }
 .bc-card--hover:hover { transform: translateY(-2px); box-shadow: var(--bc-shadow-lift); }
 
@@ -144,6 +143,7 @@ h1, h2, h3, h4 { font-family: var(--bc-font-display); color: var(--bc-teal); }
   .bc-stagger > *:nth-child(8) { animation-delay: 280ms; }
   .bc-stagger > *:nth-child(n + 9) { animation-delay: 320ms; }
   .bc-skeleton { animation: bc-shimmer 1.4s linear infinite; }
+  .bc-card { transition: transform 0.15s ease, box-shadow 0.15s ease; }
   .mat-mdc-unelevated-button, .mat-mdc-outlined-button, .mat-mdc-icon-button { transition: transform 0.1s ease; }
   .mat-mdc-unelevated-button:active, .mat-mdc-outlined-button:active { transform: scale(0.98); }
 }
