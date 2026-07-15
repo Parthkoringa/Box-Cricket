@@ -1,39 +1,155 @@
-// Include theming for Angular Material with `mat.theme()`.
-// This Sass mixin will define CSS variables that are used for styling Angular Material
-// components according to the Material 3 design spec.
-// Learn more about theming and how to use it for your application's
-// custom components at https://material.angular.dev/guide/theming
 @use '@angular/material' as mat;
 
 html {
   height: 100%;
-  @include mat.theme(
-    (
-      color: (
-        primary: mat.$azure-palette,
-        tertiary: mat.$blue-palette,
-      ),
-      typography: Roboto,
-      density: 0,
-    )
-  );
+  @include mat.theme((
+    color: (primary: mat.$cyan-palette, tertiary: mat.$yellow-palette),
+    typography: 'Albert Sans',
+    density: 0,
+  ));
+}
+
+:root {
+  /* ---- Morning Maidan tokens (spec §2) ---- */
+  --bc-ink: #1a2b31;
+  --bc-muted: #647b82;
+  --bc-paper: #fbfaf7;
+  --bc-sand: #f3ecdd;
+  --bc-line: #e8e3d6;
+  --bc-card: #ffffff;
+  --bc-teal: #0f4c5c;
+  --bc-teal-deep: #0a3844;
+  --bc-teal-soft: rgba(15, 76, 92, 0.08);
+  --bc-gold: #e0a52e;
+  --bc-gold-soft: rgba(224, 165, 46, 0.15);
+  --bc-green: #2e7d4f;
+  --bc-red: #c4502c;
+  --bc-grey: #8a9296;
+  --bc-shadow: 0 6px 18px rgba(15, 76, 92, 0.08);
+  --bc-shadow-lift: 0 10px 26px rgba(15, 76, 92, 0.14);
+  --bc-radius: 14px;
+  --bc-font-display: 'Bricolage Grotesque', sans-serif;
+  --bc-font-body: 'Albert Sans', sans-serif;
+
+  /* ---- Map Material system tokens onto the palette ---- */
+  --mat-sys-primary: var(--bc-teal);
+  --mat-sys-on-primary: #fdfcfa;
+  --mat-sys-primary-container: var(--bc-teal-soft);
+  --mat-sys-on-primary-container: var(--bc-teal-deep);
+  --mat-sys-surface: var(--bc-paper);
+  --mat-sys-surface-container: var(--bc-card);
+  --mat-sys-surface-container-high: var(--bc-card);
+  --mat-sys-surface-container-highest: var(--bc-sand);
+  --mat-sys-on-surface: var(--bc-ink);
+  --mat-sys-on-surface-variant: var(--bc-muted);
+  --mat-sys-outline: var(--bc-line);
+  --mat-sys-outline-variant: var(--bc-line);
+  --mat-sys-error: var(--bc-red);
+  --mat-sys-corner-medium: 12px;
+  --mat-sys-corner-large: var(--bc-radius);
 }
 
 body {
-  // Default the application to a light color theme. This can be changed to
-  // `dark` to enable the dark color theme, or to `light dark` to defer to the
-  // user's system settings.
   color-scheme: light;
-
-  // Set a default background, font and text colors for the application using
-  // Angular Material's system-level CSS variables. Learn more about these
-  // variables at https://material.angular.dev/guide/system-variables
-  background-color: var(--mat-sys-surface);
-  color: var(--mat-sys-on-surface);
-  font: var(--mat-sys-body-medium);
-
-  // Reset the user agent margin.
   margin: 0;
   height: 100%;
+  color: var(--bc-ink);
+  font-family: var(--bc-font-body);
+  font-size: 14px;
+  line-height: 1.5;
+  background:
+    radial-gradient(circle at 92% -4%, rgba(224, 165, 46, 0.10) 0 140px, transparent 170px),
+    linear-gradient(165deg, #fdfcfa 0%, #f6f1e4 100%);
+  background-attachment: fixed;
 }
-/* You can add global styles to this file, and also import other style files */
+
+h1, h2, h3, h4 { font-family: var(--bc-font-display); color: var(--bc-teal); }
+
+/* ---------- utility classes ---------- */
+.bc-card {
+  background: var(--bc-card);
+  border-radius: var(--bc-radius);
+  box-shadow: var(--bc-shadow);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+.bc-card--hover:hover { transform: translateY(-2px); box-shadow: var(--bc-shadow-lift); }
+
+.bc-section-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--bc-font-display);
+  font-weight: 800;
+  font-size: 15px;
+  color: var(--bc-teal);
+  margin: 18px 0 10px;
+}
+.bc-section-title::after {
+  content: '';
+  flex: 1;
+  height: 1.5px;
+  background: linear-gradient(90deg, var(--bc-line), transparent);
+}
+
+.bc-money {
+  font-family: var(--bc-font-display);
+  font-weight: 800;
+  color: var(--bc-teal);
+}
+
+/* Labeled status pills — color is never the sole carrier (spec §5) */
+.bc-pill {
+  display: inline-block;
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 3px 10px;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+.bc-pill--confirmed { background: var(--bc-teal-soft); color: var(--bc-teal); border: 1px solid rgba(15, 76, 92, 0.25); }
+.bc-pill--arrived { background: var(--bc-gold-soft); color: #a3730a; border: 1px solid rgba(224, 165, 46, 0.45); }
+.bc-pill--completed { background: rgba(46, 125, 79, 0.12); color: var(--bc-green); border: 1px solid rgba(46, 125, 79, 0.3); }
+.bc-pill--cancelled { background: rgba(196, 80, 44, 0.10); color: var(--bc-red); border: 1px solid rgba(196, 80, 44, 0.3); }
+.bc-pill--no_show { background: rgba(138, 146, 150, 0.12); color: #5c676c; border: 1px solid rgba(138, 146, 150, 0.35); }
+
+/* Skeleton shimmer */
+.bc-skeleton {
+  border-radius: 10px;
+  background: linear-gradient(90deg, var(--bc-sand) 25%, #faf6ec 45%, var(--bc-sand) 65%);
+  background-size: 300% 100%;
+  min-height: 44px;
+}
+
+/* ---------- motion (all gated on reduced-motion) ---------- */
+@keyframes bc-fade-up { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+@keyframes bc-shimmer { from { background-position: 100% 0; } to { background-position: 0 0; } }
+@keyframes bc-ring {
+  0%, 100% { transform: rotate(0); }
+  8% { transform: rotate(14deg); } 16% { transform: rotate(-12deg); }
+  24% { transform: rotate(8deg); } 32% { transform: rotate(0); }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .bc-fade-up { animation: bc-fade-up 0.35s ease-out both; }
+  .bc-stagger > * { animation: bc-fade-up 0.35s ease-out both; }
+  .bc-stagger > *:nth-child(1) { animation-delay: 0ms; }
+  .bc-stagger > *:nth-child(2) { animation-delay: 40ms; }
+  .bc-stagger > *:nth-child(3) { animation-delay: 80ms; }
+  .bc-stagger > *:nth-child(4) { animation-delay: 120ms; }
+  .bc-stagger > *:nth-child(5) { animation-delay: 160ms; }
+  .bc-stagger > *:nth-child(6) { animation-delay: 200ms; }
+  .bc-stagger > *:nth-child(7) { animation-delay: 240ms; }
+  .bc-stagger > *:nth-child(8) { animation-delay: 280ms; }
+  .bc-stagger > *:nth-child(n + 9) { animation-delay: 320ms; }
+  .bc-skeleton { animation: bc-shimmer 1.4s linear infinite; }
+  .mat-mdc-unelevated-button, .mat-mdc-outlined-button, .mat-mdc-icon-button { transition: transform 0.1s ease; }
+  .mat-mdc-unelevated-button:active, .mat-mdc-outlined-button:active { transform: scale(0.98); }
+}
+
+/* Material polish that tokens alone don't reach */
+.mat-mdc-unelevated-button { font-family: var(--bc-font-display) !important; font-weight: 600 !important; letter-spacing: 0.01em; }
+.mat-mdc-dialog-container .mdc-dialog__surface { border-radius: 18px !important; box-shadow: var(--bc-shadow-lift) !important; }
+.mat-mdc-snack-bar-container .mdc-snackbar__surface { background: var(--bc-teal-deep) !important; border-radius: 10px !important; }
+.mat-mdc-form-field { width: 100%; }
