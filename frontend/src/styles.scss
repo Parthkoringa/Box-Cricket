@@ -16,6 +16,8 @@ html {
   --bc-paper: #fbfaf7;
   --bc-sand: #f3ecdd;
   --bc-line: #e8e3d6;
+  --bc-hairline: #f1ede2;
+  --bc-dayhead: #f8f4ea;
   --bc-card: #ffffff;
   --bc-teal: #0f4c5c;
   --bc-teal-deep: #0a3844;
@@ -45,6 +47,7 @@ html {
   --mat-sys-outline: var(--bc-line);
   --mat-sys-outline-variant: var(--bc-line);
   --mat-sys-error: var(--bc-red);
+  --mat-sys-on-error: #ffffff;
   --mat-sys-corner-medium: 12px;
   --mat-sys-corner-large: var(--bc-radius);
 }

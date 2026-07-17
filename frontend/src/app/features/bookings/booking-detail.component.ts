@@ -119,7 +119,7 @@ import { PaymentDialogComponent, PaymentDialogResult } from './payment-dialog.co
     .actions button { border-radius: 10px; }
     .rowline {
       display: flex; justify-content: space-between; align-items: center;
-      padding: 8px 0; border-bottom: 1px solid #f1ede2;
+      padding: 8px 0; border-bottom: 1px solid var(--bc-hairline);
     }
     .rowline:last-of-type { border-bottom: none; }
     .amount { display: flex; align-items: center; gap: 4px; font-family: var(--bc-font-display); font-weight: 700; color: var(--bc-teal); }

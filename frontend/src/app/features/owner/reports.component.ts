@@ -88,7 +88,7 @@ import { StatusChipComponent } from '../../shared/status-chip.component';
     .scroll { overflow-x: auto; }
     table { width: 100%; border-collapse: collapse; }
     th { text-align: left; padding: 8px; font-size: 10.5px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--bc-teal); border-bottom: 2px solid var(--bc-sand); white-space: nowrap; }
-    td { text-align: left; padding: 9px 8px; border-bottom: 1px solid #f1ede2; white-space: nowrap; font-size: 13px; }
+    td { text-align: left; padding: 9px 8px; border-bottom: 1px solid var(--bc-hairline); white-space: nowrap; font-size: 13px; }
     tbody tr { cursor: pointer; transition: background 0.12s ease; }
     tbody tr:hover { background: var(--bc-teal-soft); }
     .empty { color: var(--bc-muted); text-align: center; }

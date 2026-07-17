@@ -48,7 +48,7 @@ const POLL_MS = 60_000;
       @for (g of upcomingGroups(); track g.date) {
         <div class="day-head">
           <b>{{ g.label }}</b>
-          <span>{{ g.date | date: 'EEE d MMM' }}</span>
+          @if (g.label === 'Today' || g.label === 'Tomorrow') { <span>{{ g.date | date: 'EEE d MMM' }}</span> }
           <i>{{ g.count }} booking{{ g.count === 1 ? '' : 's' }}</i>
         </div>
         <div class="rows bc-card">
@@ -76,7 +76,7 @@ const POLL_MS = 60_000;
       @for (g of pastGroups(); track g.date) {
         <div class="day-head">
           <b>{{ g.label }}</b>
-          <span>{{ g.date | date: 'EEE d MMM' }}</span>
+          @if (g.label === 'Today' || g.label === 'Tomorrow') { <span>{{ g.date | date: 'EEE d MMM' }}</span> }
           <i>{{ g.count }} booking{{ g.count === 1 ? '' : 's' }}</i>
         </div>
         <div class="rows bc-card">
@@ -119,7 +119,7 @@ const POLL_MS = 60_000;
     .row {
       display: flex; align-items: center; gap: 12px;
       padding: 9px 14px; cursor: pointer;
-      border-bottom: 1px solid #f1ede2;
+      border-bottom: 1px solid var(--bc-hairline);
       transition: background 0.12s ease;
     }
     .row:last-child { border-bottom: none; }
@@ -138,7 +138,7 @@ const POLL_MS = 60_000;
       position: sticky; top: 0; z-index: 1;
       display: flex; align-items: baseline; gap: 8px;
       padding: 12px 4px 7px;
-      background: linear-gradient(180deg, #f8f4ea 70%, transparent);
+      background: linear-gradient(180deg, var(--bc-dayhead) 70%, transparent);
     }
     .day-head b { font-family: var(--bc-font-display); font-weight: 800; font-size: 15px; color: var(--bc-teal); }
     .day-head span { font-size: 11px; color: var(--bc-muted); }
