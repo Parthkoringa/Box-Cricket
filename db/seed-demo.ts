@@ -39,10 +39,9 @@ const ITEMS: Array<[string, number, number]> = [
 
 async function main() {
   const wipeOnly = process.argv.includes('--wipe');
-  await sql.query('TRUNCATE bookings CASCADE');
-  console.log('Cleared all bookings (payments/items cascade).');
-  if (wipeOnly) return;
 
+  // Validate the target DB BEFORE any destructive statement — a misconfigured
+  // DATABASE_URL must fail here, not after the wipe.
   const owners = await sql.query(`SELECT id, role FROM users`);
   const owner = owners.find((u: Record<string, unknown>) => u['role'] === 'owner');
   const worker = owners.find((u: Record<string, unknown>) => u['role'] === 'worker');
@@ -50,6 +49,12 @@ async function main() {
   const courts = await sql.query('SELECT id FROM courts LIMIT 1');
   if (!courts[0]) throw new Error('No court found — apply db/schema.sql first.');
   const court = courts[0]['id'];
+
+  const host = new URL(required('DATABASE_URL').replace(/^postgres(ql)?:/, 'https:')).host;
+  console.log(`WIPING all bookings on ${host} ...`);
+  await sql.query('TRUNCATE bookings CASCADE');
+  console.log('Cleared all bookings (payments/items cascade).');
+  if (wipeOnly) return;
 
   let count = 0;
   async function booking(opts: {
